@@ -14,6 +14,12 @@ const Tasks = () => {
 
   const user_id = JSON.parse(localStorage.getItem("TaskGenie")).user.id;
 
+  useEffect(() => {
+    if(!localStorage.getItem("TaskGenie")){
+      navigate("/");
+    }
+  }, []);
+
 
     useEffect(() => {
       const fetchTasks = async () => {
