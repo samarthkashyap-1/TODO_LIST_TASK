@@ -144,6 +144,7 @@ const TaskShow = ({ tasks, setTasks,loader , setLoader}) => {
               task={task}
               onDelete={() => onDelete(task.id)}
               onUpdate={() => handleUpdateClick(task)}
+              loader={loader}
             />
           ))}
         </div>
@@ -231,6 +232,7 @@ const TaskShow = ({ tasks, setTasks,loader , setLoader}) => {
               <button
                 type="submit"
                 className="p-2 bg-blue-500 text-white text-lg rounded-md hover:bg-blue-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500"
+                disabled={loader}
               >
                 Update Task
               </button>

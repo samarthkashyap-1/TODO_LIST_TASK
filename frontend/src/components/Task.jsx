@@ -1,7 +1,7 @@
 import React from "react";
 
 // Task component
-const Task = ({ task, onDelete, onUpdate }) => {
+const Task = ({ task, onDelete, onUpdate,loader }) => {
   // Extracting the due date and formatting it
   const dueDate = new Date(task.dueDate);
   const formattedDueDate = dueDate.toLocaleDateString();
@@ -44,11 +44,13 @@ const Task = ({ task, onDelete, onUpdate }) => {
         <button
           onClick={onUpdate}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          disabled={loader}
         >
           Update
         </button>
         <button
           onClick={onDelete}
+          disabled={loader}
           className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
         >
           Delete
