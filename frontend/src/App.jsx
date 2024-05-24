@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -35,6 +36,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route exact path="/" element={<Login />} />
           <Route exact path="/tasks" element={<Tasks />} />
+          <Route exact path="*" element={<NotFound />} />
         </Routes>
       <ToastContainer />
       </div>

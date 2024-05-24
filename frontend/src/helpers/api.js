@@ -4,7 +4,7 @@ import axios from 'axios';
 // dotenv.config();
 
 const BASE_URL = import.meta.env.VITE_REACT_APP_URL;
-console.log(BASE_URL);
+// console.log(BASE_URL);
 
 
 
