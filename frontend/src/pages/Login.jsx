@@ -3,6 +3,7 @@ import { login } from "../helpers/api";
 import UserContext from "../helpers/userContext";
 import { Link,useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import pass from "../assets/pass.png";
 
 
 const Login = () => {
@@ -13,6 +14,7 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
 
 
@@ -62,15 +64,21 @@ const Login = () => {
             placeholder="jhondoe@example.com"
           />
 
-          <input
-            type="password"
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-            className="p-2 px-4 border-2 border-gray-300 rounded-md"
-            id="password"
-            placeholder="Password"
-          />
+          <div className="flex border-2 border-gray-300 rounded-md ">
+            <input
+              type={showPassword ? "text" : "password"}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              className="p-2 px-4 focus:outline-none w-full rounded-md"
+              id="password"
+              placeholder="Password"
+            />
+            <img src={pass} alt="" className="scale-50"
+            onClick={
+              () => setShowPassword(!showPassword)
+            }/>
+          </div>
         </div>
         <div className="mx-auto w-full">
           <button
@@ -84,7 +92,10 @@ const Login = () => {
           <div className="flex justify-center mt-2">
             <p className="flex">
               Don't have an account?
-              <Link to={"/register"} className="text-blue-500 mx-auto ml-1"> Register</Link>
+              <Link to={"/register"} className="text-blue-500 mx-auto ml-1">
+                {" "}
+                Register
+              </Link>
             </p>
           </div>
         </div>

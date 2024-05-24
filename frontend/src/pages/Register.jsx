@@ -3,6 +3,7 @@ import { register } from "../helpers/api";
 
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import pass from "../assets/pass.png";
 
 
 
@@ -12,6 +13,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loader, setLoader] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
 
   const navigate = useNavigate();
@@ -76,25 +78,40 @@ const Register = () => {
             id="email"
             placeholder="jhondoe@example.com"
           />
-
-          <input
-            type="password"
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-            className="p-2 px-4 border-2 border-gray-300 rounded-md"
-            id="password"
-            placeholder="Password"
-          />
-          <input
-            type="password"
-            onChange={(e) => {
-              setConfirmPassword(e.target.value);
-            }}
-            className="p-2 px-4 border-2 border-gray-300 rounded-md"
-            id="confirmpassword"
-            placeholder="Confirm Password"
-          />
+          <div className="flex border-2 border-gray-300 rounded-md ">
+            <input
+              type={showPassword ? "text" : "password"}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              className="p-2 px-4 focus:outline-none w-full rounded-md"
+              id="password"
+              placeholder="Password"
+            />
+            <img
+              src={pass}
+              alt=""
+              className="scale-50"
+              onClick={() => setShowPassword(!showPassword)}
+            />
+          </div>
+          <div className="flex border-2 border-gray-300 rounded-md ">
+            <input
+              type={showPassword ? "text" : "password"}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+              }}
+              className="p-2 px-4 focus:outline-none w-full rounded-md"
+              id="password"
+              placeholder="Password"
+            />
+            <img
+              src={pass}
+              alt=""
+              className="scale-50"
+              onClick={() => setShowPassword(!showPassword)}
+            />
+          </div>
         </div>
         <div className="mx-auto w-full">
           <button
@@ -108,7 +125,10 @@ const Register = () => {
           <div className="flex justify-center mt-2">
             <p className="flex">
               Already have an account?
-              <Link to={"/"} className="text-blue-500 mx-auto ml-1"> Login</Link>
+              <Link to={"/"} className="text-blue-500 mx-auto ml-1">
+                {" "}
+                Login
+              </Link>
             </p>
           </div>
         </div>

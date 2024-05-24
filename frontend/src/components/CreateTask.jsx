@@ -23,6 +23,12 @@ const CreateTask = ({ setTasks, tasks }) => {
       setTasks([...tasks, response]);
       setLoader(false);
       toast.success("Task Created Successfully");
+      setTask({
+        title: "",
+        description: "",
+        status: "to-do",
+        dueDate: "",
+      });
     } catch (error) {
       setLoader(false);
       toast.error("Error Creating Task");
