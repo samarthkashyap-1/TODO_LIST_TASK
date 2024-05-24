@@ -4,10 +4,12 @@ import UserContext from "../helpers/userContext";
 import { Link,useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+
 const Login = () => {
 
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
+  const [loader, setLoader] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,6 +24,7 @@ const Login = () => {
     };
 
     try {
+      setLoader(true);
       const response = await login(email, password);
       console.log(response);
       
@@ -31,8 +34,12 @@ const Login = () => {
       localStorage.setItem("TaskGenie", JSON.stringify(response));
       navigate("/tasks");
       window.location.reload();
+      setLoader(false);
+
 
     } catch (error) {
+      setLoader(false);
+
       toast.error("Error Logging In");
       console.log(error.response.data.message);
     }
@@ -69,6 +76,7 @@ const Login = () => {
           <button
             type="submit"
             onClick={handleSubmit}
+            disabled={loader}
             className="p-2 bg-blue-500 text-white w-full rounded-md mx-auto"
           >
             Login

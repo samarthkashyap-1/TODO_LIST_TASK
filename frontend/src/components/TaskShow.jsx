@@ -3,12 +3,14 @@ import Task from "./Task";
 import { getAllTasks, deleteTask, updateTask } from "../helpers/api";
 import { toast } from "react-toastify";
 
-const TaskShow = ({ tasks, setTasks }) => {
+
+const TaskShow = ({ tasks, setTasks,loader , setLoader}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filterOption, setFilterOption] = useState("newest");
   const [selectedTask, setSelectedTask] = useState(null); // Selected task for updating
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const tasksPerPage = 3;
+ 
 
   const refreshTasks = async () => {
     try {
@@ -21,26 +23,36 @@ const TaskShow = ({ tasks, setTasks }) => {
 
   const onDelete = async (taskId) => {
     try {
+
+      setLoader(true);
       await deleteTask(taskId);
 
       toast.success("Task Deleted Successfully");
 
       refreshTasks();
+      setLoader(false);
     } catch (error) {
+      setLoader(false);
+
       toast.error("Error Deleting Task");
       console.log(error.response.data.message);
     }
   };
 
   const onUpdate = async (updatedTask) => {
-    console.log(updatedTask);
+    // console.log(updatedTask);
     try {
+      setLoader(true);
       await updateTask(updatedTask.id, updatedTask);
 
       toast.success("Task Updated Successfully");
       // Refresh tasks after updating
       refreshTasks();
+      setLoader(false);
+
     } catch (error) {
+      setLoader(false);
+
       toast.error("Error Updating Task");
       console.log(error.response.data.message);
     }
@@ -100,22 +112,44 @@ const TaskShow = ({ tasks, setTasks }) => {
           <option value="done">Done</option>
         </select>
       </div>
-      {tasks.length === 0 ? (
-        <h1 className="text-center text-2xl font-semibold mt-4">
-          No Tasks Found
-        </h1>
+      
+      {loader ? (
+        <div className="flex justify-center items-center h-full">
+          <svg
+            className="animate-spin h-10 w-10 text-blue-500"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A8.001 8.001 0 0120.709 5.291H16v6h6v-2.709z"
+            ></path>
+          </svg>
+        </div>
       ) : (
-        <div className="mx-auto p-5 flex w-full flex-col gap-4">
-          {currentTasks.map((task, index) => (
+        <div className="p-4 flex-1 overflow-y-auto">
+          {currentTasks.map((task) => (
             <Task
-              key={index}
+              key={task.id}
               task={task}
               onDelete={() => onDelete(task.id)}
               onUpdate={() => handleUpdateClick(task)}
             />
           ))}
         </div>
-      )}
+      )
+      }
+
 
       <div className="flex justify-center items-center mt-auto space-x-2">
         {Array.from({ length: totalPages }, (_, index) => (

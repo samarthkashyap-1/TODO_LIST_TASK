@@ -5,11 +5,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 
+
 const Register = () => {
     const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loader, setLoader] = useState(false);
+
 
   const navigate = useNavigate();
 
@@ -30,14 +33,17 @@ const Register = () => {
     };
 
     try {
+      setLoader(true);
         const response = await register(name, email, password
         );
         console.log(response);
-        
+        setLoader(false);
         toast.success("Registration Successfull");
         navigate("/");
         }
         catch (error) {
+          
+            setLoader(false);
             toast.error("Error Registering");
             console.log(error.response.data.message);
         }
@@ -94,6 +100,7 @@ const Register = () => {
           <button
             type="submit"
             onClick={handleSubmit}
+            disabled={loader}
             className="p-2 bg-blue-500 text-white w-full rounded-md mx-auto"
           >
             Register

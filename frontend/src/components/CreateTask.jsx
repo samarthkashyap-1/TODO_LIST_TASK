@@ -10,16 +10,21 @@ const CreateTask = ({ setTasks, tasks }) => {
     dueDate: "",
   });
 
+  const [loader, setLoader] = useState(false);
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      setLoader(true);
     
       const response = await createTask(task);
       setTasks([...tasks, response]);
-
+      setLoader(false);
       toast.success("Task Created Successfully");
     } catch (error) {
+      setLoader(false);
       toast.error("Error Creating Task");
       console.log(error.response.data.message);
     }
@@ -69,6 +74,7 @@ const CreateTask = ({ setTasks, tasks }) => {
           type="submit"
           className="p-2 bg-blue-500 text-white w-full text-lg rounded-md mx-auto"
           onClick={handleSubmit}
+          disabled={loader}
         >
           Create Task
         </button>
