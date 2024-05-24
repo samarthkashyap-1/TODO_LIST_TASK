@@ -6,7 +6,7 @@ const ErrorHandler = require("./customError");
 
 const secret = process.env.SECRET_KEY;
 
-console.log(secret);
+// console.log(secret);
 const createJWT = (user) => {
   const token = jwt.sign(
     { id: user.id, username: user.username },

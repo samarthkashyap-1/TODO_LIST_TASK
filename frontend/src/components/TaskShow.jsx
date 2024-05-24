@@ -1,19 +1,14 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Task from "./Task";
 import { getAllTasks, deleteTask, updateTask } from "../helpers/api";
 import { toast } from "react-toastify";
 
-
-const TaskShow = ({tasks ,setTasks}) => {
-//   const [tasks, setTasks] = useState([]);
+const TaskShow = ({ tasks, setTasks }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filterOption, setFilterOption] = useState("newest");
   const [selectedTask, setSelectedTask] = useState(null); // Selected task for updating
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const tasksPerPage = 3;
-
-
-
 
   const refreshTasks = async () => {
     try {
@@ -29,28 +24,24 @@ const TaskShow = ({tasks ,setTasks}) => {
       await deleteTask(taskId);
 
       toast.success("Task Deleted Successfully");
-    
+
       refreshTasks();
     } catch (error) {
-        toast.error("Error Deleting Task");
+      toast.error("Error Deleting Task");
       console.log(error.response.data.message);
     }
   };
 
   const onUpdate = async (updatedTask) => {
+    console.log(updatedTask);
     try {
-      await updateTask(
-        updatedTask.id,
-        updatedTask.content,
-        updatedTask.date,
-        updatedTask.important
-      );
-      
-        toast.success("Task Updated Successfully");
+      await updateTask(updatedTask.id, updatedTask);
+
+      toast.success("Task Updated Successfully");
       // Refresh tasks after updating
       refreshTasks();
     } catch (error) {
-        toast.error("Error Updating Task");
+      toast.error("Error Updating Task");
       console.log(error.response.data.message);
     }
   };
@@ -66,18 +57,18 @@ const TaskShow = ({tasks ,setTasks}) => {
   };
 
   // Filtered tasks based on filter option
-
-let filteredTasks = [...tasks];
-if (filterOption === "oldest") {
-  filteredTasks.sort((a, b) => new Date(a.date) - new Date(b.date));
-} else if (filterOption === "newest") {
-  filteredTasks.sort((a, b) => new Date(b.date) - new Date(a.date));
-} else if (filterOption === "important") {
-  filteredTasks = tasks.filter((task) => task.important);
-} else if (filterOption === "not-important") {
-  filteredTasks = tasks.filter((task) => !task.important);
-}
-
+  let filteredTasks = [...tasks];
+  if (filterOption === "oldest") {
+    filteredTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+  } else if (filterOption === "newest") {
+    filteredTasks.sort((a, b) => new Date(b.dueDate) - new Date(a.dueDate));
+  } else if (
+    filterOption === "to-do" ||
+    filterOption === "in-progress" ||
+    filterOption === "done"
+  ) {
+    filteredTasks = tasks.filter((task) => task.status === filterOption);
+  }
 
   // Calculate the tasks to be displayed on the current page
   const indexOfLastTask = currentPage * tasksPerPage;
@@ -104,11 +95,12 @@ if (filterOption === "oldest") {
         >
           <option value="newest">Newest First</option>
           <option value="oldest">Oldest First</option>
-          <option value="important">Important</option>
-          <option value="not-important">Not Important</option>
+          <option value="to-do">To Do</option>
+          <option value="in-progress">In Progress</option>
+          <option value="done">Done</option>
         </select>
       </div>
-      {tasks.length===0 ? (
+      {tasks.length === 0 ? (
         <h1 className="text-center text-2xl font-semibold mt-4">
           No Tasks Found
         </h1>
@@ -164,41 +156,44 @@ if (filterOption === "oldest") {
             >
               <input
                 type="text"
-                value={selectedTask?.content}
+                value={selectedTask?.title}
                 onChange={(e) =>
-                  setSelectedTask({ ...selectedTask, content: e.target.value })
+                  setSelectedTask({ ...selectedTask, title: e.target.value })
                 }
                 className="p-3 border rounded-md w-full mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Task Name"
+                placeholder="Task Title"
               />
+              <textarea
+                value={selectedTask?.description}
+                onChange={(e) =>
+                  setSelectedTask({
+                    ...selectedTask,
+                    description: e.target.value,
+                  })
+                }
+                className="p-3 border rounded-md w-full mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Task Description"
+              />
+              <select
+                value={selectedTask?.status}
+                onChange={(e) =>
+                  setSelectedTask({ ...selectedTask, status: e.target.value })
+                }
+                className="p-3 border rounded-md w-full mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="to-do">To Do</option>
+                <option value="in-progress">In Progress</option>
+                <option value="done">Done</option>
+              </select>
               <input
                 type="date"
-                value={selectedTask?.date}
+                value={selectedTask?.dueDate}
                 onChange={(e) =>
-                  setSelectedTask({ ...selectedTask, date: e.target.value })
+                  setSelectedTask({ ...selectedTask, dueDate: e.target.value })
                 }
                 className="p-3 border rounded-md w-full mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Due Date"
               />
-              <div className="flex items-center gap-2 mb-2">
-                <input
-                  type="checkbox"
-                  checked={selectedTask?.important}
-                  onChange={(e) =>
-                    setSelectedTask({
-                      ...selectedTask,
-                      important: e.target.checked,
-                    })
-                  }
-                  className="rounded-md focus:ring-blue-500"
-                />
-                <label
-                  htmlFor="important"
-                  className="text-gray-700 font-medium"
-                >
-                  Important Task?
-                </label>
-              </div>
               <button
                 type="submit"
                 className="p-2 bg-blue-500 text-white text-lg rounded-md hover:bg-blue-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500"

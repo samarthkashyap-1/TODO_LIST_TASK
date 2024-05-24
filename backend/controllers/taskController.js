@@ -45,22 +45,30 @@ const getTask = async (req, res, next) => {
 }
 
 const createTask = async (req, res, next) => {
-    const { content, date, important } = req.body;
+    const { 
+        title, description, status, dueDate
+    } = req.body;
     const { id } = req.user;
+    // console.log(req.user);
+
+    // console.log(req.body);
 
     try {
         const user = await
             User.findById(id);
+            // console.log(user);
         const task = new Task({
-            content,
-            date,
-            important,
+            title, description, status, dueDate,
             user: user.id
         });
+        // console.log(task);
 
         const savedTask = await task.save();
+        console.log(savedTask);
+
+
         // user.tasks = user.tasks.concat(savedTask._id);
-        await user.save();
+        
         res.status(201).json(savedTask);
     }
     catch (error) {
@@ -70,12 +78,16 @@ const createTask = async (req, res, next) => {
 
 const updateTask = async (req, res, next) => {
     const { id } = req.params;
-    const { content, date, important } = req.body;
+    const { title, 
+        description, status, dueDate
+     } = req.body;
 
     try {
         const task = await Task
 
-            .findByIdAndUpdate(id, { content, date, important }, { new: true });
+            .findByIdAndUpdate(id, { 
+                title, description, status, dueDate
+             }, { new: true });
         if (task) {
             res.status(200).json(task);
         }

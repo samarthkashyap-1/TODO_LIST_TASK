@@ -53,21 +53,15 @@ export const getTask = async (id) => {
     return data;
 }
 
-export const createTask = async (content, date, important) => {
-    const { data } = await api.post("/api/task", {
-      content,
-      date,
-      important,
-    });
+export const createTask = async (task) => {
+    const { data } = await api.post("/api/task", 
+      task
+    );
     return data;
 }
 
-export const updateTask = async (id, content, date, important) => {
-    const { data } = await api.put(`/api/task/${id}`, {
-      content,
-      date,
-      important,
-    });
+export const updateTask = async (id, task) => {
+    const { data } = await api.put(`/api/task/${id}`, task);
     return data;
 }
 
