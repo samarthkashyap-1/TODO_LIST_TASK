@@ -42,7 +42,7 @@ const Login = () => {
     } catch (error) {
       setLoader(false);
 
-      toast.error("Error Logging In");
+      toast.error(error.response.data.message);
       console.log(error.response.data.message);
     }
   };

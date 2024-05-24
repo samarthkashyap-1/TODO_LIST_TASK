@@ -46,7 +46,7 @@ const Register = () => {
         catch (error) {
           
             setLoader(false);
-            toast.error("Error Registering");
+            toast.error(error.response.data.message);
             console.log(error.response.data.message);
         }
 

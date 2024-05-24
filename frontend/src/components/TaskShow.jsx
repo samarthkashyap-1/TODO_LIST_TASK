@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Task from "./Task";
-import { getAllTasks, deleteTask, updateTask } from "../helpers/api";
+import { getUserTask, deleteTask, updateTask } from "../helpers/api";
 import { toast } from "react-toastify";
 
 
@@ -10,11 +10,13 @@ const TaskShow = ({ tasks, setTasks,loader , setLoader}) => {
   const [selectedTask, setSelectedTask] = useState(null); // Selected task for updating
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const tasksPerPage = 3;
+  const user_id = JSON.parse(localStorage.getItem("TaskGenie")).user.id;
+
  
 
   const refreshTasks = async () => {
     try {
-      const response = await getAllTasks();
+      const response = await getUserTask(user_id);
       setTasks(response);
     } catch (error) {
       console.log(error);
