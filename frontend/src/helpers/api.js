@@ -1,6 +1,13 @@
 import axios from 'axios';
+// import dotenv from 'dotenv';
 
-const BASE_URL = 'http://localhost:3000';
+// dotenv.config();
+
+const BASE_URL = import.meta.env.VITE_REACT_APP_URL;
+console.log(BASE_URL);
+
+
+
 const token = localStorage.getItem("TaskGenie")
   ? JSON.parse(localStorage.getItem("TaskGenie")).token
   : null;
